@@ -16,7 +16,7 @@ func main() {
 	service := services.ProvideService(repo)
 
 	// Create a new router with the service
-	router := routes.NewRouter(service)
+	router := routes.ProvideRouter(service)
 
 	// Set up the routes and start the HTTP server
 	log.Println("Server listening on :8080")
