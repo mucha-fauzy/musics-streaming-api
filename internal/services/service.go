@@ -13,10 +13,10 @@ type Service interface {
 }
 
 type ServiceImpl struct {
-	Repo repository.SongRepository
+	Repo repository.Repository
 }
 
-func ProvideService(repo repository.SongRepository) *ServiceImpl {
+func ProvideService(repo repository.Repository) *ServiceImpl {
 	return &ServiceImpl{
 		Repo: repo,
 	}
