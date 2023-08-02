@@ -14,15 +14,7 @@ type SongRepository interface {
 	DeleteSong(id string) bool
 }
 
-type SongImpl struct {
-	songs []*models.Songs
-}
-
-func NewSongImpl() *SongImpl {
-	return &SongImpl{}
-}
-
-func (r *SongImpl) AddSong(song *models.Songs) (*models.Songs, bool) {
+func (r *RepositoryImpl) AddSong(song *models.Songs) (*models.Songs, bool) {
 	// Generate a new random UUID for the song
 	song.ID = uuid.New().String()
 	song.CreatedAt = time.Now()
@@ -31,11 +23,11 @@ func (r *SongImpl) AddSong(song *models.Songs) (*models.Songs, bool) {
 	return song, true
 }
 
-func (r *SongImpl) GetAllSongs() []*models.Songs {
+func (r *RepositoryImpl) GetAllSongs() []*models.Songs {
 	return r.songs
 }
 
-func (r *SongImpl) UpdateSong(id string, updatedSong *models.UpdateSongs) (*models.Songs, bool) {
+func (r *RepositoryImpl) UpdateSong(id string, updatedSong *models.UpdateSongs) (*models.Songs, bool) {
 	for _, song := range r.songs {
 		if song.ID == id {
 			song.Title = updatedSong.Title
@@ -52,7 +44,7 @@ func (r *SongImpl) UpdateSong(id string, updatedSong *models.UpdateSongs) (*mode
 	return nil, false
 }
 
-func (r *SongImpl) DeleteSong(id string) bool {
+func (r *RepositoryImpl) DeleteSong(id string) bool {
 	for i, song := range r.songs {
 		if song.ID == id {
 			// Remove the song from the slice
