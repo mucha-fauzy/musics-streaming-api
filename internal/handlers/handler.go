@@ -14,12 +14,12 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type SongHandler struct {
+type Handler struct {
 	service services.Service
 }
 
-func NewSongHandler(service services.Service) *SongHandler {
-	return &SongHandler{service: service}
+func ProvideHandler(service services.Service) *Handler {
+	return &Handler{service: service}
 }
 
 // @Summary Create a new song
@@ -29,7 +29,7 @@ func NewSongHandler(service services.Service) *SongHandler {
 // @Success 201 {object} models.Songs
 // @Failure 400 {object} ErrorResponse
 // @Router /api/v1/songs [post]
-func (h *SongHandler) CreateSongHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateSongHandler(w http.ResponseWriter, r *http.Request) {
 	var newSong models.Songs
 	err := json.NewDecoder(r.Body).Decode(&newSong)
 	if err != nil {
@@ -65,7 +65,7 @@ func (h *SongHandler) CreateSongHandler(w http.ResponseWriter, r *http.Request) 
 // @Success 200 {array} models.Songs
 // @Failure 404 {object} ErrorResponse
 // @Router /api/v1/songs [get]
-func (h *SongHandler) GetSongHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetSongHandler(w http.ResponseWriter, r *http.Request) {
 	// Get query parameters
 	filterTitle := r.URL.Query().Get("title")
 	sortBy := r.URL.Query().Get("sort_by")
@@ -160,7 +160,7 @@ func reverseSlice(s []*models.Songs) {
 // @Success 200 {object} models.Songs
 // @Failure 400 {object} ErrorResponse
 // @Router /api/v1/songs/{id} [put]
-func (h *SongHandler) UpdateSongHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateSongHandler(w http.ResponseWriter, r *http.Request) {
 	songID := chi.URLParam(r, "id")
 
 	var updatedSong models.UpdateSongs
@@ -194,7 +194,7 @@ func (h *SongHandler) UpdateSongHandler(w http.ResponseWriter, r *http.Request) 
 // @Success 204 "No Content"
 // @Failure 404 {object} ErrorResponse
 // @Router /api/v1/songs/{id} [delete]
-func (h *SongHandler) DeleteSongHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteSongHandler(w http.ResponseWriter, r *http.Request) {
 	songID := chi.URLParam(r, "id")
 
 	success := h.service.DeleteSong(songID)
