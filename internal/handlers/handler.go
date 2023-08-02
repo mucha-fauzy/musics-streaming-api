@@ -41,13 +41,17 @@ func (h *SongHandler) CreateSongHandler(w http.ResponseWriter, r *http.Request) 
 	song, success := h.service.AddSong(&newSong)
 	if !success {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to add song"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to create a song entry"})
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(song)
+	response := map[string]interface{}{
+		"message": "Song entry successfully created",
+		"song":    song,
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 // @Summary Get all songs
@@ -132,7 +136,7 @@ func (h *SongHandler) GetSongHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if there are any songs after filtering and sorting
 	if len(songs) == 0 {
 		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]string{"error": "No songs found"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "Songs not found"})
 		return
 	}
 
@@ -170,13 +174,17 @@ func (h *SongHandler) UpdateSongHandler(w http.ResponseWriter, r *http.Request) 
 	song, success := h.service.UpdateSong(songID, &updatedSong)
 	if !success {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to update song"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "Song not found"})
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(song)
+	response := map[string]interface{}{
+		"message": "Song successfully updated",
+		"song":    song,
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 // @Summary Delete a song
@@ -195,7 +203,6 @@ func (h *SongHandler) DeleteSongHandler(w http.ResponseWriter, r *http.Request) 
 		json.NewEncoder(w).Encode(map[string]string{"error": "Song not found"})
 		return
 	}
-
 	w.WriteHeader(http.StatusNoContent)
 }
 
