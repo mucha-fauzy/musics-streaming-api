@@ -13,11 +13,11 @@ import (
 )
 
 type Router struct {
-	Handler *handlers.SongHandler
+	Handler *handlers.Handler
 }
 
-func NewRouter(service services.Service) *Router {
-	handler := handlers.NewSongHandler(service)
+func ProvideRouter(service services.Service) *Router {
+	handler := handlers.ProvideHandler(service)
 	return &Router{
 		Handler: handler,
 	}
