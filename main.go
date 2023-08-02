@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Create a new repository instance
-	repo := repository.NewSongImpl()
+	repo := repository.ProvideRepo()
 
 	// Create a new service instance with the repository
 	service := services.ProvideService(repo)
